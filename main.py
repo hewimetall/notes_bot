@@ -9,16 +9,16 @@ import json
 import pathlib 
 from aiogram import Bot, Dispatcher, executor, types
 
+BASE_PATH = pathlib.Path(__file__).parent
+
 @dataclass
 class Settings:
     token:str
-BASE_PATH = pathlib.Path(__file__).parent
+
 
 with open(BASE_PATH.joinpath(".env"),'rb') as file:
     data = json.load(file)
     settings = Settings(**data)    
-
-API_TOKEN = settings.token
 
 
 class Register:
@@ -49,7 +49,7 @@ class Register:
 logging.basicConfig(level=logging.INFO)
 
 # Initialize bot and dispatcher
-bot = Bot(token=API_TOKEN)
+bot = Bot(token=settings.token)
 dp = Dispatcher(bot)
 
 class PathDispather(object):
