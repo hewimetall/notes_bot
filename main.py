@@ -4,10 +4,22 @@ It echoes any incoming text messages.
 """
 
 import logging
-
+from dataclasses import dataclass
+import json
+import pathlib 
 from aiogram import Bot, Dispatcher, executor, types
 
-API_TOKEN = '6166554654:AAEPbVpOBWJipAlcDFJPR2X0t_vWKxaXQ2o'
+@dataclass
+class Settings:
+    token:str
+BASE_PATH = pathlib.Path(__file__).parent
+
+with open(BASE_PATH.joinpath(".env"),'rb') as file:
+    data = json.load(file)
+    settings = Settings(**data)    
+
+API_TOKEN = settings.token
+
 
 class Register:
     _data = {}
