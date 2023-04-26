@@ -18,7 +18,7 @@ class Settings:
     token:str
 
 
-with open(BASE_PATH.joinpath(".env"),'rb') as file:
+with open(BASE_PATH.joinpath(".env_setup"),'rb') as file:
     data = json.load(file)
     settings = Settings(**data)    
 

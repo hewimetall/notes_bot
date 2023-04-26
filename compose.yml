@@ -1,0 +1,8 @@
+version: "3"
+services:
+  app:
+    build:
+      context: .
+    volumes:
+      - './date:/app/date'
+      - './data:/app/data'
