@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "notes-bot"
+version = "0.1.0"
+description = ""
+authors = ["net ro <you@example.com>"]
+readme = "README.md"
+packages = [{include = "notes_bot"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+aiogram = "^2.25.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
