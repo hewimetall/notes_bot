@@ -8,6 +8,8 @@ from dataclasses import dataclass
 import json
 import pathlib 
 from aiogram import Bot, Dispatcher, executor, types
+import sqlite3
+import datetime
 
 BASE_PATH = pathlib.Path(__file__).parent
 
@@ -82,7 +84,7 @@ class PathDispather(object):
            prefix = data.split("_")[-1]
            return await cls.__register[prefix].process(message)
         else:
-            message.reply("Состояние не установленно")   
+           await message.reply("Состояние не установленно")   
         return None
 
 
@@ -120,20 +122,37 @@ class Notes(Base):
     prefix = 'note'
     @classmethod
     async def list(cls, message: types.Message):
-        await message.reply("Hi is good day")
+        await message.reply("Hi is good day", parse_mode="markdown")
 
 class Task(Base):
     prefix = 'task'
-
+    dirs = BASE_PATH.joinpath("date")
+    dirs.mkdir(exist_ok= True)
+    
     @classmethod
     async def create(cls, message: types.Message):
         await super().create(message)
         await message.reply("Можно создать задачи")
+    
+    @classmethod
+    def get_file_name(cls):
+        date = datetime.datetime.now().strftime("%y_%m_%d.md")
+        file = cls.dirs.joinpath(date)
+        if not file.is_file():
+            f = file.open("w")
+            f.close()
+        return file
+
+    @classmethod
+    async def list(cls, message: types.Message):
+        f = cls.get_file_name().open("r")
+        await message.reply(f.read())
+    
     @classmethod
     async def process(cls, message: types.Message):
+        f = cls.get_file_name().open("a")
+        f.writelines(f"* {message.text}.\n")
         await message.reply("Успешно записана")
-        
-
 
 @dp.message_handler(commands = ['start', 'end'])
 async def echo(message: types.Message):
